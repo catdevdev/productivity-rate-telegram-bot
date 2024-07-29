@@ -1,6 +1,8 @@
 # 🎉 Welcome to Productivity Rate Telegram Bot! 🎉
 
-![Bot Logo](assets/bot-logo.png)
+<p align="center">
+  <img src="assets/bot-logo.png" alt="Bot Logo" width="150" height="150">
+</p>
 
 ## 🏗️ Architecture
 
