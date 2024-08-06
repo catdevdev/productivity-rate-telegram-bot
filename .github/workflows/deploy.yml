@@ -11,6 +11,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Set short git commit SHA
+        id: commit
+        uses: prompt/actions-commit-hash@v2
+
       - name: Checkout code
         uses: actions/checkout@v3
 
@@ -27,10 +31,6 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
-
-      # - name: Get short commit hash
-      #   id: commit
-      #   run: echo "short=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
 
       - name: Build, Tag, and Push Docker Image
         env:
