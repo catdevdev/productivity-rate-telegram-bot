@@ -47,4 +47,4 @@ jobs:
         env:
           CICD_GIT_COMMIT: ${{ steps.commit.outputs.short }}
         run: |
-          envsubst < ./k8s | kubectl apply -f -
+          kubectl apply -f .
