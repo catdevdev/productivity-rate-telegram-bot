@@ -51,7 +51,7 @@ async def calculate(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         await update.message.reply_text("Sorry, I couldn't calculate the expression.")
 
 def main() -> None:
-    application = Application.builder().token("YOUR_TELEGRAM_BOT_TOKEN").build()
+    application = Application.builder().token("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").build()
 
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("help", help_command))
