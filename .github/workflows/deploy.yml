@@ -50,3 +50,11 @@ jobs:
           for f in ./k8s/*.yaml; do
             sed "s|\$CICD_GIT_COMMIT|${CICD_GIT_COMMIT}|g" "$f" | kubectl apply -f -
           done
+
+      - name: Notify via Telegram
+        env:
+          TELEGRAM_BOT_ID_DEV: ${{ secrets.TELEGRAM_BOT_ID_DEV }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          MESSAGE="Deployment to EKS completed successfully with commit ID: ${{ steps.commit.outputs.short }}"
+          curl -s -X POST https://api.telegram.org/bot${TELEGRAM_BOT_ID_DEV}/sendMessage -d chat_id=${TELEGRAM_CHAT_ID} -d text="$MESSAGE"
