@@ -45,6 +45,8 @@ jobs:
 
       - name: Deploy to EKS
         env:
-          CICD_GIT_COMMIT: ${{ env.CICD_GIT_COMMIT }}
+          CICD_GIT_COMMIT: ${{ steps.commit.outputs.short }}
         run: |
-          for f in ./k8s/*.yaml; do envsubst < $f | kubectl apply -f -; done
+          for f in ./k8s/*.yaml; do
+            sed "s|\$CICD_GIT_COMMIT|${CICD_GIT_COMMIT}|g" "$f" | kubectl apply -f -
+          done

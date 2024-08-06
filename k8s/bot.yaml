@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: bot-repo-container
-          image: 014498641718.dkr.ecr.eu-north-1.amazonaws.com/bot-repo:${CICD_GIT_COMMIT}
+          image: 014498641718.dkr.ecr.eu-north-1.amazonaws.com/bot-repo:$CICD_GIT_COMMIT
           ports:
             - containerPort: 80
 ---
