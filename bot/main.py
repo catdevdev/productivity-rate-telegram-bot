@@ -1,6 +1,13 @@
+import os
 import logging
 from telegram import ForceReply, Update
 from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters
+from groq import Groq
+
+# Initialize the Groq client with the provided API key
+client = Groq(
+    api_key="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"
+)
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
@@ -25,13 +32,26 @@ async def calculate(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     group_id = update.message.chat_id
     print(group_id)
     try:
-        result = eval(expression, {"__builtins__": {}})
+        # Use Groq API to evaluate the expression
+        chat_completion = client.chat.completions.create(
+            messages=[
+                {
+                    "role": "user",
+                    "content": f"Calculate the following expression: {expression}",
+                }
+            ],
+            model="llama3-8b-8192",
+        )
+        
+        # Get the result from the response
+        result = chat_completion.choices[0].message.content
         await update.message.reply_text(f"The result is: {result}")
     except Exception as e:
-        pass
+        logger.error(f"An error occurred: {e}")
+        await update.message.reply_text("Sorry, I couldn't calculate the expression.")
 
 def main() -> None:
-    application = Application.builder().token("7442271112:AAE_8XnTO2CU89zT0DmmD2lhpPIFvPAI5xo").build()
+    application = Application.builder().token("YOUR_TELEGRAM_BOT_TOKEN").build()
 
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("help", help_command))
