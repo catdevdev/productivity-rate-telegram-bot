@@ -37,15 +37,15 @@ async def calculate(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             messages=[
                 {
                     "role": "user",
-                    "content": f"Calculate the following expression: {expression}. Output should be only number result!!",
+                    "content": f"Calculate the following expression: {expression}. Output should be only number result!! If user enter text that not related to mathematical expression then return 'null'",
                 }
             ],
             model="llama3-8b-8192",
         )
         
-        # Get the result from the response
         result = chat_completion.choices[0].message.content
-        await update.message.reply_text(f"The result is: {result}")
+        if(result != 'null') 
+            await update.message.reply_text(f"{result}")
     except Exception as e:
         logger.error(f"An error occurred: {e}")
         await update.message.reply_text("Sorry, I couldn't calculate the expression.")
