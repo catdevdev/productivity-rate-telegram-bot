@@ -28,8 +28,23 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
+      # - name: Get short commit hash
+      #   id: commit
+      #   run: echo "short=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
       - name: Build, Tag, and Push Docker Image
+        env:
+          CICD_GIT_COMMIT: ${{ steps.commit.outputs.short }}
         run: |
           docker build -t bot-repo:latest ./bot
-          docker tag bot-repo:latest 014498641718.dkr.ecr.eu-north-1.amazonaws.com/bot-repo:latest
-          docker push 014498641718.dkr.ecr.eu-north-1.amazonaws.com/bot-repo:latest
+          docker tag bot-repo:latest 014498641718.dkr.ecr.eu-north-1.amazonaws.com/bot-repo:$CICD_GIT_COMMIT
+          docker push 014498641718.dkr.ecr.eu-north-1.amazonaws.com/bot-repo:$CICD_GIT_COMMIT
+
+      - name: Update kube config
+        run: aws eks update-kubeconfig --region eu-west-1 --name ex-eks
+
+      - name: Deploy to EKS
+        env:
+          CICD_GIT_COMMIT: ${{ steps.commit.outputs.short }}
+        run: |
+          envsubst < ./k8s | kubectl apply -f -
