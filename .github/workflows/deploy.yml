@@ -11,10 +11,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Capture start time
-        id: start-time
-        run: echo "start_time=$(date +%s)" >> $GITHUB_ENV
-
       - name: Set short git commit SHA
         id: commit
         uses: prompt/actions-commit-hash@v2
@@ -27,8 +23,10 @@ jobs:
           TELEGRAM_BOT_ID_DEV: ${{ secrets.TELEGRAM_BOT_ID_DEV }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
-          START_MESSAGE='🚀 *Deployment process started* for commit ID: `7df3441` on branch: `main`.'
-          curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_ID_DEV}/sendMessage" -d chat_id=${TELEGRAM_CHAT_ID} -d text="$START_MESSAGE" -d parse_mode=MarkdownV2
+          START_TIME=$(date +%s)
+          echo "START_TIME=$START_TIME" >> $GITHUB_ENV
+          START_MESSAGE="🚀 Deployment process started for commit ID: ${{ steps.commit.outputs.short }}."
+          curl -s -X POST https://api.telegram.org/bot${TELEGRAM_BOT_ID_DEV}/sendMessage -d chat_id=${TELEGRAM_CHAT_ID} -d text="$START_MESSAGE"
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -69,6 +67,7 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
           END_TIME=$(date +%s)
-          ELAPSED_TIME=$(($END_TIME - $start_time))
-          END_MESSAGE="☑️ *Deployment to EKS completed successfully!* 🚢\n\n*Commit ID:* \`${{ steps.commit.outputs.short }}\`\n*Branch:* \`main\`\n*Environment:* \`dev-aws\`\n*Duration:* \`${ELAPSED_TIME}\` seconds"
-          curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_ID_DEV}/sendMessage" -d chat_id=${TELEGRAM_CHAT_ID} -d text="$END_MESSAGE" -d parse_mode=MarkdownV2
+          START_TIME=${{ env.START_TIME }}
+          DURATION=$((END_TIME - START_TIME))
+          END_MESSAGE="☑️ Deployment completed successfully for commit ID: ${{ steps.commit.outputs.short }}. Duration: ${DURATION} seconds."
+          curl -s -X POST https://api.telegram.org/bot${TELEGRAM_BOT_ID_DEV}/sendMessage -d chat_id=${TELEGRAM_CHAT_ID} -d text="$END_MESSAGE"
