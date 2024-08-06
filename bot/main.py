@@ -28,7 +28,7 @@ async def calculate(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         result = eval(expression, {"__builtins__": {}})
         await update.message.reply_text(f"The result is: {result}")
     except Exception as e:
-        await update.message.reply_text("Sorry, I couldn't understand that. Please send a valid arithmetic expression.")
+        pass
 
 def main() -> None:
     application = Application.builder().token("7442271112:AAE_8XnTO2CU89zT0DmmD2lhpPIFvPAI5xo").build()
