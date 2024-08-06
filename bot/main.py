@@ -85,7 +85,7 @@ async def calculate(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                     accesswebcam();"
 
                     все ответы должны быть на русском языке
-                    ответы должны быть в виде 3-6 пунктов в виде инстукции
+                    ответы должны быть в виде 3-6 пунктов в виде инстукции. пукнт по 10-12 предложений
                     """ + expression,
                 }
             ],
