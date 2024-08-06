@@ -23,6 +23,13 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-north-1
+
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build, Tag, and Push Docker Image
+        run: |
+          docker build -t bot-repo:latest ./bot
+          docker tag bot-repo:latest 014498641718.dkr.ecr.eu-north-1.amazonaws.com/bot-repo:latest
+          docker push 014498641718.dkr.ecr.eu-north-1.amazonaws.com/bot-repo:latest
