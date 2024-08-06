@@ -37,7 +37,7 @@ async def calculate(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             messages=[
                 {
                     "role": "user",
-                    "content": f"Calculate the following expression: {expression}",
+                    "content": f"Calculate the following expression: {expression}. Output should be only number result!!",
                 }
             ],
             model="llama3-8b-8192",
@@ -51,7 +51,7 @@ async def calculate(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         await update.message.reply_text("Sorry, I couldn't calculate the expression.")
 
 def main() -> None:
-    application = Application.builder().token("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").build()
+    application = Application.builder().token("7442271112:AAE_8XnTO2CU89zT0DmmD2lhpPIFvPAI5xo").build()
 
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("help", help_command))
