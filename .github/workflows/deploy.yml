@@ -18,14 +18,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Get commit message
+        id: commit-message
+        run: echo "COMMIT_MESSAGE=$(git log -1 --pretty=format:'%s')" >> $GITHUB_ENV
+
       - name: Notify start of deployment via Telegram
         env:
           TELEGRAM_BOT_ID_DEV: ${{ secrets.TELEGRAM_BOT_ID_DEV }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          COMMIT_MESSAGE: ${{ env.COMMIT_MESSAGE }}
         run: |
           START_TIME=$(date +%s)
           echo "START_TIME=$START_TIME" >> $GITHUB_ENV
-          START_MESSAGE="🚀 Deployment process started for commit ID: ${{ steps.commit.outputs.short }}."
+          START_MESSAGE="🚀 Deployment process started for commit ID: ${{ steps.commit.outputs.short }}. Update: "$COMMIT_MESSAGE""
           curl -s -X POST https://api.telegram.org/bot${TELEGRAM_BOT_ID_DEV}/sendMessage -d chat_id=${TELEGRAM_CHAT_ID} -d text="$START_MESSAGE"
 
       - name: Set up Docker Buildx
