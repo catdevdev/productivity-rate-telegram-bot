@@ -7,6 +7,7 @@ on:
 
 jobs:
   build-and-deploy:
+    environment: dev-aws
     runs-on: ubuntu-latest
 
     steps:
