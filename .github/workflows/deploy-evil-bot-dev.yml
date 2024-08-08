@@ -51,7 +51,7 @@ jobs:
         env:
           CICD_GIT_COMMIT: ${{ steps.commit.outputs.short }}
         run: |
-          docker build -t bot-repo:latest ./bot
+          docker build -t bot-repo:latest ./evil-gpt-bot
           docker tag bot-repo:latest 014498641718.dkr.ecr.eu-north-1.amazonaws.com/bot-repo:$CICD_GIT_COMMIT
           docker push 014498641718.dkr.ecr.eu-north-1.amazonaws.com/bot-repo:$CICD_GIT_COMMIT
 

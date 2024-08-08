@@ -5,7 +5,7 @@ metadata:
   labels:
     app: bot-repo
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: bot-repo
@@ -17,18 +17,3 @@ spec:
       containers:
         - name: bot-repo-container
           image: 014498641718.dkr.ecr.eu-north-1.amazonaws.com/bot-repo:$CICD_GIT_COMMIT
-          ports:
-            - containerPort: 80
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: bot-repo-service
-spec:
-  type: LoadBalancer
-  selector:
-    app: bot-repo
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 80
