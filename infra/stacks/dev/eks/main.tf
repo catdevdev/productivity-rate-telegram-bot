@@ -18,13 +18,13 @@ terraform {
 }
 
 provider "aws" {
-  region = local.region
+  region  = local.region  # Use the local.region variable to define the region
   profile = "dev"
 }
 
 provider "aws" {
-  region = "us-east-1"
-  alias  = "virginia"
+  region  = "eu-north-1" # Changed to eu-north-1
+  alias   = "public_ecr" # Renamed alias for clarity
   profile = "dev"
 }
 
@@ -58,12 +58,12 @@ provider "kubectl" {
 
 data "aws_availability_zones" "available" {}
 data "aws_ecrpublic_authorization_token" "token" {
-  provider = aws.virginia
+  provider = aws.public_ecr # Use the public_ecr alias to access eu-north-1
 }
 
 locals {
   name   = "ex-${basename(path.cwd)}"
-  region = "eu-west-1"
+  region = "eu-north-1"  # Set the region to eu-north-1
 
   vpc_cidr = "10.0.0.0/16"
   azs      = slice(data.aws_availability_zones.available.names, 0, 3)

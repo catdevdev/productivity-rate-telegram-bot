@@ -13,5 +13,6 @@ terramate run terraform apply -auto-approve
 
 terramate --chdir infra/stacks/dev/ecr run -- terraform init
 terramate --chdir infra/stacks/dev/ecr run -- terraform apply -auto-approve
+terramate --chdir infra/stacks/dev/ecr run -- terraform destroy -auto-approve
 
 aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 014498641718.dkr.ecr.eu-north-1.amazonaws.com
