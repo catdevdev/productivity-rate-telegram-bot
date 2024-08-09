@@ -56,7 +56,7 @@ jobs:
           docker push 014498641718.dkr.ecr.eu-north-1.amazonaws.com/bot-repo:$CICD_GIT_COMMIT
 
       - name: Update kube config
-        run: aws eks update-kubeconfig --region eu-west-1 --name ex-eks
+        run: aws eks update-kubeconfig --region eu-north-1 --name ex-eks
 
       - name: Deploy to EKS
         env:

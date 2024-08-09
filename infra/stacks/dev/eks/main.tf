@@ -23,8 +23,8 @@ provider "aws" {
 }
 
 provider "aws" {
-  region  = "eu-north-1" # Changed to eu-north-1
-  alias   = "public_ecr" # Renamed alias for clarity
+  region = "us-east-1"  # Correct region for accessing ECR Public
+  alias  = "public_ecr"
   profile = "dev"
 }
 
@@ -58,7 +58,7 @@ provider "kubectl" {
 
 data "aws_availability_zones" "available" {}
 data "aws_ecrpublic_authorization_token" "token" {
-  provider = aws.public_ecr # Use the public_ecr alias to access eu-north-1
+  provider = aws.public_ecr # Use the public_ecr alias to access ECR Public in us-east-1
 }
 
 locals {
