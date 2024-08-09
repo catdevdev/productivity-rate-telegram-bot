@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user = update.effective_user
     await update.message.reply_html(
-        rf"Hi {user.mention_html()}! I am a simple calculator bot. Send me a mathematical expression like '2 + 2 * 4' and I'll calculate the result for you.",
+        rf"Hi {user.mention_html()}! It's evil gpt.",
         reply_markup=ForceReply(selective=True),
     )
 
