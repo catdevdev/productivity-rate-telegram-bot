@@ -19,7 +19,7 @@ class Expense(BaseModel):
     currency: Literal['USD', 'EUR', 'UAH'] = Field(..., example='UAH')
 
 # Database connection pool
-DATABASE_URL = 'postgresql://postgres:supersecretpass@localhost:5432/postgres'
+DATABASE_URL = 'postgresql://postgres:supersecretpass@172.20.2.135:5432/postgres'
 pool = None
 
 async def init_db():
