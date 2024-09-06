@@ -30,7 +30,7 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-    - port: 8000 # External port
+    - port: 80 # External port
       targetPort: 8000 # Port exposed by the container
   selector:
     app: expenses-repo
