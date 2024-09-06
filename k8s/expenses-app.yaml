@@ -34,3 +34,26 @@ spec:
       targetPort: 8000 # Port exposed by the container
   selector:
     app: expenses-repo
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: expenses-repo-ingress
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod" # Use the appropriate issuer
+spec:
+  tls:
+    - hosts:
+        - a13ea8f41ea70437593bd0c7b5bd767f-100097524.eu-north-1.elb.amazonaws.com
+      secretName: expenses-repo-tls # Name of the secret to store SSL certs
+  rules:
+    - host: a13ea8f41ea70437593bd0c7b5bd767f-100097524.eu-north-1.elb.amazonaws.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: expenses-repo-service
+                port:
+                  number: 80
