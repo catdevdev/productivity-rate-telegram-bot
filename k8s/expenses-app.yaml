@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: expenses-repo-deployment
+  labels:
+    app: expenses-repo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: expenses-repo
+  template:
+    metadata:
+      labels:
+        app: expenses-repo
+    spec:
+      containers:
+        - name: expenses-repo-container
+          image: 014498641718.dkr.ecr.eu-north-1.amazonaws.com/expenses-repo:$CICD_GIT_COMMIT

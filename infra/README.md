@@ -11,6 +11,10 @@ terramate run --changed terraform destroy -auto-approve
 terramate run terraform destroy -auto-approve  
 terramate run terraform apply -auto-approve
 
+terramate --chdir . run -- terraform init
+terramate --chdir . run -- terraform apply -auto-approve
+terramate --chdir . run -- terraform destroy -auto-approve
+
 terramate --chdir infra/stacks/dev/ecr run -- terraform init
 terramate --chdir infra/stacks/dev/ecr run -- terraform apply -auto-approve
 terramate --chdir infra/stacks/dev/ecr run -- terraform destroy -auto-approve

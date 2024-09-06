@@ -28,9 +28,36 @@ resource "aws_ecr_lifecycle_policy" "my_repository_policy" {
       {
         rulePriority = 1
         description  = "Limit to 10 images"
-        selection    = {
-          tagStatus = "any"
-          countType = "imageCountMoreThan"
+        selection = {
+          tagStatus   = "any"
+          countType   = "imageCountMoreThan"
+          countNumber = 10
+        }
+        action = {
+          type = "expire"
+        }
+      }
+    ]
+  })
+}
+
+
+resource "aws_ecr_repository" "expenses-repository" {
+  name = "expenses-repo"
+}
+
+# Create ECR Lifecycle Policy
+resource "aws_ecr_lifecycle_policy" "expenses-repository_policy" {
+  repository = aws_ecr_repository.expenses-repository.name
+
+  policy = jsonencode({
+    rules = [
+      {
+        rulePriority = 1
+        description  = "Limit to 10 images"
+        selection = {
+          tagStatus   = "any"
+          countType   = "imageCountMoreThan"
           countNumber = 10
         }
         action = {

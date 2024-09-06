@@ -1,19 +1,19 @@
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: bot-repo-deployment
-  labels:
-    app: bot-repo
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: bot-repo
-  template:
-    metadata:
-      labels:
-        app: bot-repo
-    spec:
-      containers:
-        - name: bot-repo-container
-          image: 014498641718.dkr.ecr.eu-north-1.amazonaws.com/bot-repo:$CICD_GIT_COMMIT
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: bot-repo-deployment
+#   labels:
+#     app: bot-repo
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: bot-repo
+#   template:
+#     metadata:
+#       labels:
+#         app: bot-repo
+#     spec:
+#       containers:
+#         - name: bot-repo-container
+#           image: 014498641718.dkr.ecr.eu-north-1.amazonaws.com/bot-repo:$CICD_GIT_COMMIT
