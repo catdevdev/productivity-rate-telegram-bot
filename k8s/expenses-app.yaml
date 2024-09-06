@@ -17,3 +17,20 @@ spec:
       containers:
         - name: expenses-repo-container
           image: 014498641718.dkr.ecr.eu-north-1.amazonaws.com/expenses-repo:$CICD_GIT_COMMIT
+          ports:
+            - containerPort: 8000 # Define the port your app is listening on
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: expenses-repo-service
+  labels:
+    app: expenses-repo
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 8000 # External port
+      targetPort: 8000 # Port exposed by the container
+  selector:
+    app: expenses-repo
