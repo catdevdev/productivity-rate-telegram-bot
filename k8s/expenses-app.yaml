@@ -44,5 +44,9 @@ spec:
       port: 443 # External port for HTTPS
       targetPort: 8000 # Port exposed by the container
       protocol: TCP
+    - name: test
+      port: 8000 # External port for HTTPS
+      targetPort: 8000 # Port exposed by the container
+      protocol: TCP
   selector:
     app: expenses-repo
