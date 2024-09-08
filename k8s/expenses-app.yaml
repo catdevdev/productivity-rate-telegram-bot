@@ -36,17 +36,46 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-    - name: http
-      port: 80 # External port for HTTP
+    - port: 80 # External port
       targetPort: 8000 # Port exposed by the container
-      protocol: TCP
-    - name: https
-      port: 443 # External port for HTTPS
-      targetPort: 8000 # Port exposed by the container
-      protocol: TCP
-    - name: test
-      port: 8000 # External port for HTTPS
-      targetPort: 8000 # Port exposed by the container
-      protocol: TCP
+
   selector:
     app: expenses-repo
+# //////
+
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: expenses-repo-deployment
+#   labels:
+#     app: expenses-repo
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: expenses-repo
+#   template:
+#     metadata:
+#       labels:
+#         app: expenses-repo
+#     spec:
+#       containers:
+#         - name: expenses-repo-container
+#           image: 014498641718.dkr.ecr.eu-north-1.amazonaws.com/expenses-repo:$CICD_GIT_COMMIT
+#           ports:
+#             - containerPort: 8000 # Define the port your app is listening on
+
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: expenses-repo-service
+#   labels:
+#     app: expenses-repo
+# spec:
+#   type: LoadBalancer
+#   ports:
+#     - port: 80 # External port
+#       targetPort: 8000 # Port exposed by the container
+#   selector:
+#     app: expenses-repo
