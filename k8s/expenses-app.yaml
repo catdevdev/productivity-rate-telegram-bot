@@ -36,10 +36,6 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-    - name: http
-      port: 80 # External port for HTTP
-      targetPort: 8000 # Port exposed by the container
-      protocol: TCP
     - name: https
       port: 443 # External port for HTTPS
       targetPort: 8000 # Port exposed by the container
