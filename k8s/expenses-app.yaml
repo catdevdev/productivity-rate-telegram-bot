@@ -27,10 +27,10 @@ metadata:
   name: expenses-repo-service
   labels:
     app: expenses-repo
-  annotations:
-    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:eu-north-1:014498641718:certificate/3a6467b4-a27d-49cf-a054-607a1c16df38
-    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: http
-    service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "443"
+  # annotations:
+  #   service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:eu-north-1:014498641718:certificate/3a6467b4-a27d-49cf-a054-607a1c16df38
+  #   service.beta.kubernetes.io/aws-load-balancer-backend-protocol: http
+  #   service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "443"
 spec:
   type: LoadBalancer
   ports:
