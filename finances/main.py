@@ -7,8 +7,8 @@ import asyncio
 app = FastAPI(
     swagger_ui_parameters={
         "syntaxHighlight": False,
-        "syntaxHighlight.theme": "obsidian",  # Change syntax highlighting theme
-        "deepLinking": False  # Disable deep linking
+        "syntaxHighlight.theme": "obsidian", 
+        "deepLinking": False  
     }
 )
 
@@ -19,7 +19,7 @@ class Expense(BaseModel):
     currency: Literal['USD', 'EUR', 'UAH'] = Field(..., example='UAH')
 
 # Database connection pool
-DATABASE_URL = 'postgresql://nekoneki:nekoneki@aba43f8288f2945e1b47b173af95332b-1211842377.eu-north-1.elb.amazonaws.com:5432/postgres'
+DATABASE_URL = 'postgresql://nekoneki:nekoneki@a8c260d1283ee4ae5a46f28d37b52a62-1771201952.eu-north-1.elb.amazonaws.com:5432/expenses_db'
 pool = None
 
 async def init_db():

@@ -1,28 +1,35 @@
+# PostgreSQL Cluster Configuration
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
   name: cluster-finances
 spec:
   instances: 3
-
-  # Define the superuser secret
   superuserSecret:
     name: superuser-secret
-
-  # Initialize the cluster with initdb method
   bootstrap:
     initdb:
-      # Create the application database and owner
       database: nekoneki
       owner: nekoneki
       secret:
         name: nekoneki-secret
-
-  # Define storage for the cluster
+      postInitSQL:
+        - "ALTER USER nekoneki WITH SUPERUSER;"
+  managed:
+    services:
+      disabledDefaultServices: ["ro", "r"]
+      additional:
+        - selectorType: rw
+          serviceTemplate:
+            metadata:
+              name: cluster-example-rw-lb
+            spec:
+              type: LoadBalancer
   storage:
     size: 1Gi
 
 ---
+# Secret for PostgreSQL Owner
 apiVersion: v1
 kind: Secret
 metadata:
