@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: expenses-repo-cert
+  namespace: default # Adjust this to match your actual namespace if different
+spec:
+  secretName: expenses-repo-tls # This secret will store the certificate
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  commonName: api-api-api.com
+  dnsNames:
+    - api-api-api.com
