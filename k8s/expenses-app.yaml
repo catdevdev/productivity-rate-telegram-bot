@@ -19,24 +19,23 @@ spec:
           image: 014498641718.dkr.ecr.eu-north-1.amazonaws.com/expenses-repo:$CICD_GIT_COMMIT
           ports:
             - containerPort: 8000 # Define the port your app is listening on
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: expenses-repo-service
+  labels:
+    app: expenses-repo
 
-# ---
-# apiVersion: v1
-# kind: Service
-# metadata:
-#   name: expenses-repo-service
-#   labels:
-#     app: expenses-repo
+spec:
+  type: LoadBalancer
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+    - name: https
+      port: 443
+      targetPort: 443
 
-# spec:
-#   type: LoadBalancer
-#   ports:
-#     - name: http
-#       port: 80
-#       targetPort: 80
-#     - name: https
-#       port: 443
-#       targetPort: 443
-
-#   selector:
-#     app: expenses-repo
+  selector:
+    app: expenses-repo
