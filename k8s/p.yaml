@@ -1,36 +1,33 @@
-apiVersion: v1
-kind: Secret
-metadata:
-  name: superuser-secret
-type: kubernetes.io/basic-auth
-data:
-  username: cG9zdGdyZXM= # "postgres" base64 encoded
-  password: c3VwZXJzZWNyZXRwYXNz # Replace with your own base64 encoded password
-
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: app-secret
-type: kubernetes.io/basic-auth
-data:
-  username: YXBw # "app" base64 encoded
-  password: YXBwZXBhc3M= # Replace with your own base64 encoded password
-
----
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
   name: cluster-finances
 spec:
   instances: 3
+
+  # Define the superuser secret
   superuserSecret:
     name: superuser-secret
+
+  # Initialize the cluster with initdb method
   bootstrap:
     initdb:
-      database: app
-      owner: app
+      # Create the application database and owner
+      database: nekoneki
+      owner: nekoneki
       secret:
-        name: app-secret
+        name: nekoneki-secret
+
+  # Define storage for the cluster
   storage:
     size: 1Gi
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: nekoneki-secret
+type: kubernetes.io/basic-auth
+data:
+  username: bmVrb25la2k= # Base64 encoded 'nekoneki'
+  password: bmVrb25la2k= # Base64 encoded 'nekoneki'
