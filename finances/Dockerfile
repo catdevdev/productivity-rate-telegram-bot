@@ -10,8 +10,9 @@ COPY . .
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Expose the port FastAPI runs on
-EXPOSE 8000
+# Expose ports 80 and 443
+EXPOSE 80
+EXPOSE 443
 
-# Run the FastAPI app using uvicorn
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Run the FastAPI app using uvicorn on both ports 80 and 443
+CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port 80 & uvicorn main:app --host 0.0.0.0 --port 443"]
