@@ -31,7 +31,7 @@ spec:
   type: LoadBalancer
   ports:
     - name: http
-      port: 433
+      port: 443
       targetPort: 443
 
   selector:
