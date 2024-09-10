@@ -18,7 +18,7 @@ spec:
         - name: expenses-repo-container
           image: 014498641718.dkr.ecr.eu-north-1.amazonaws.com/expenses-repo:$CICD_GIT_COMMIT
           ports:
-            - containerPort: 443
+            - containerPort: 80
 ---
 apiVersion: v1
 kind: Service
