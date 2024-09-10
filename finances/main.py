@@ -12,18 +12,15 @@ app = FastAPI(
     }
 )
 
-# Define the Pydantic model for expense input
 class Expense(BaseModel):
     destination: str = Field(..., example="Groceries")
     amount: float = Field(..., example=100.0)
     currency: Literal['USD', 'EUR', 'UAH'] = Field(..., example='UAH')
 
-# Define the Pydantic model for expense output
 class ExpenseOutput(Expense):
     id: int
     created_at: datetime
 
-# Database connection pool
 DATABASE_URL = 'postgresql://nekoneki:nekoneki@a2794a54deb1c4f1bac4d5dfc8590d37-1520523198.eu-north-1.elb.amazonaws.com:5432/expenses_db'
 pool = None
 
@@ -65,14 +62,12 @@ async def create_expenses(expenses: List[Expense]):
                     ''',
                     expense.destination, expense.amount, expense.currency
                 )
-                # Convert the asyncpg.Record to a dictionary and add to the list
                 created_expenses.append(dict(row))
     return created_expenses
 
 @app.get("/expenses/", response_model=List[ExpenseOutput])
 async def get_expenses(expense_date: Optional[date] = Query(None, description="Filter expenses by date")) -> List[ExpenseOutput]:
     async with pool.acquire() as connection:
-        # Filter by the provided date if expense_date is given
         if expense_date:
             rows = await connection.fetch(
                 '''
@@ -84,7 +79,6 @@ async def get_expenses(expense_date: Optional[date] = Query(None, description="F
             )
         else:
             rows = await connection.fetch('SELECT * FROM expenses ORDER BY created_at DESC')
-        # Convert each asyncpg.Record to a dictionary
         return [dict(row) for row in rows]
 
 @app.delete("/expenses/{expense_id}", response_model=dict)
