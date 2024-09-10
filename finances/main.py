@@ -7,8 +7,8 @@ import asyncio
 app = FastAPI(
     swagger_ui_parameters={
         "syntaxHighlight": False,
-        "syntaxHighlight.theme": "obsidian", 
-        "deepLinking": False  
+        "syntaxHighlight.theme": "obsidian",
+        "deepLinking": False
     }
 )
 
@@ -25,6 +25,18 @@ pool = None
 async def init_db():
     global pool
     pool = await asyncpg.create_pool(DATABASE_URL)
+
+    # Create the database and table if they don't exist
+    async with pool.acquire() as connection:
+        # Create the 'expenses' table if it doesn't exist
+        await connection.execute('''
+            CREATE TABLE IF NOT EXISTS expenses (
+                id SERIAL PRIMARY KEY,
+                destination TEXT NOT NULL,
+                amount NUMERIC NOT NULL,
+                currency VARCHAR(3) NOT NULL
+            )
+        ''')
 
 @app.on_event("startup")
 async def on_startup():
