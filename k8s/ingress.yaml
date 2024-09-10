@@ -27,7 +27,7 @@ spec:
               service:
                 name: cluster-example-rw-lb
                 port:
-                  number: 5432 # Use the port your database is listening on
+                  number: 5432
   tls:
     - hosts:
         - api-api-api.com
