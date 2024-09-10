@@ -18,20 +18,9 @@ spec:
                 name: expenses-repo-service
                 port:
                   number: 80
-    - host: db.api-api-api.com
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: cluster-example-rw-lb
-                port:
-                  number: 5432
   tls:
     - hosts:
         - api-api-api.com
-        - db.api-api-api.com
       secretName: cert-secret-name
 ---
 apiVersion: cert-manager.io/v1
@@ -60,7 +49,6 @@ spec:
   isCA: false
   dnsNames:
     - api-api-api.com
-    - db.api-api-api.com
   issuerRef:
     name: letsencrypt-issuer
     kind: ClusterIssuer
