@@ -51,20 +51,23 @@ async def on_startup():
 async def on_shutdown():
     await pool.close()
 
-@app.post("/expenses/", response_model=ExpenseOutput)
-async def create_expense(expense: Expense):
+@app.post("/expenses/", response_model=List[ExpenseOutput])
+async def create_expenses(expenses: List[Expense]):
+    created_expenses = []
     async with pool.acquire() as connection:
         async with connection.transaction():
-            row = await connection.fetchrow(
-                '''
-                INSERT INTO expenses(destination, amount, currency)
-                VALUES($1, $2, $3)
-                RETURNING id, destination, amount, currency, created_at
-                ''',
-                expense.destination, expense.amount, expense.currency
-            )
-            # Convert the asyncpg.Record to a dictionary
-            return dict(row)
+            for expense in expenses:
+                row = await connection.fetchrow(
+                    '''
+                    INSERT INTO expenses(destination, amount, currency)
+                    VALUES($1, $2, $3)
+                    RETURNING id, destination, amount, currency, created_at
+                    ''',
+                    expense.destination, expense.amount, expense.currency
+                )
+                # Convert the asyncpg.Record to a dictionary and add to the list
+                created_expenses.append(dict(row))
+    return created_expenses
 
 @app.get("/expenses/", response_model=List[ExpenseOutput])
 async def get_expenses(expense_date: Optional[date] = Query(None, description="Filter expenses by date")) -> List[ExpenseOutput]:
