@@ -24,7 +24,7 @@ class ExpenseOutput(Expense):
     created_at: datetime
 
 # Database connection pool
-DATABASE_URL = 'postgresql://nekoneki:nekoneki@af6b1e24581644284923d429c3f9eeae-1659383355.eu-north-1.elb.amazonaws.com:5432/expenses_db'
+DATABASE_URL = 'postgresql://nekoneki:nekoneki@a2794a54deb1c4f1bac4d5dfc8590d37-1520523198.eu-north-1.elb.amazonaws.com:5432/expenses_db'
 pool = None
 
 async def init_db():
