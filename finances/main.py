@@ -63,17 +63,25 @@ async def create_expense(expense: Expense):
                 ''',
                 expense.destination, expense.amount, expense.currency
             )
-    return row
+            # Convert the asyncpg.Record to a dictionary
+            return dict(row)
 
 @app.get("/expenses/", response_model=List[ExpenseOutput])
 async def get_expenses(expense_date: Optional[date] = Query(None, description="Filter expenses by date")) -> List[ExpenseOutput]:
     async with pool.acquire() as connection:
+        # Filter by the provided date if expense_date is given
         if expense_date:
             rows = await connection.fetch(
-                'SELECT * FROM expenses WHERE DATE(created_at) = $1 ORDER BY created_at DESC', expense_date
+                '''
+                SELECT * FROM expenses 
+                WHERE DATE(created_at) = $1 
+                ORDER BY created_at DESC
+                ''', 
+                expense_date
             )
         else:
             rows = await connection.fetch('SELECT * FROM expenses ORDER BY created_at DESC')
+        # Convert each asyncpg.Record to a dictionary
         return [dict(row) for row in rows]
 
 @app.delete("/expenses/{expense_id}", response_model=dict)
