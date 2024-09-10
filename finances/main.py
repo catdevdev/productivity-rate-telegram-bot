@@ -27,6 +27,10 @@ class ExpenseOutput(Expense):
 class ExpenseArrayWrapper(BaseModel):
     expenses: List[Expense]
 
+# Define the Pydantic model for deleting multiple expenses
+class DeleteExpensesRequest(BaseModel):
+    expense_ids: List[int] = Field(..., example=[1, 2, 3])
+
 # Database connection pool
 DATABASE_URL = 'postgresql://nekoneki:nekoneki@a2794a54deb1c4f1bac4d5dfc8590d37-1520523198.eu-north-1.elb.amazonaws.com:5432/expenses_db'
 pool = None
@@ -89,12 +93,17 @@ async def get_expenses(expense_date: Optional[date] = Query(None, description="F
             rows = await connection.fetch('SELECT * FROM expenses ORDER BY created_at DESC')
         return [dict(row) for row in rows]
 
-@app.delete("/expenses/{expense_id}", response_model=dict)
-async def delete_expense(expense_id: int):
+# Updated endpoint to delete multiple expenses
+@app.delete("/expenses/", response_model=dict)
+async def delete_expenses(delete_request: DeleteExpensesRequest):
     async with pool.acquire() as connection:
-        result = await connection.execute(
-            'DELETE FROM expenses WHERE id = $1', expense_id
-        )
-        if result == "DELETE 0":
-            raise HTTPException(status_code=404, detail="Expense not found")
-    return {"message": f"Expense with id {expense_id} deleted"}
+        async with connection.transaction():
+            # Build the query for deletion
+            result = await connection.execute(
+                'DELETE FROM expenses WHERE id = ANY($1::int[])',
+                delete_request.expense_ids
+            )
+            if result == "DELETE 0":
+                raise HTTPException(status_code=404, detail="No expenses found to delete")
+    return {"message": f"Expenses with ids {delete_request.expense_ids} deleted"}
+
