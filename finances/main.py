@@ -93,16 +93,16 @@ async def get_expenses(expense_date: Optional[date] = Query(None, description="F
             rows = await connection.fetch('SELECT * FROM expenses ORDER BY created_at DESC')
         return [dict(row) for row in rows]
 
+# Updated endpoint to delete multiple expenses with proper response handling
 @app.delete("/expenses/", response_model=dict)
 async def delete_expenses(delete_request: DeleteExpensesRequest):
     async with pool.acquire() as connection:
         async with connection.transaction():
-            # Build the query for deletion
             result = await connection.execute(
                 'DELETE FROM expenses WHERE id = ANY($1::int[])',
                 delete_request.expense_ids
             )
-            if result == "DELETE 0":
+            deleted_count = int(result.split(' ')[1])  # Extract the number of deleted rows
+            if deleted_count == 0:
                 raise HTTPException(status_code=404, detail="No expenses found to delete")
-    return {"message": f"Expenses with ids {delete_request.expense_ids} deleted"}
-
+    return {"message": f"Expenses with ids {delete_request.expense_ids} deleted successfully, count: {deleted_count}"}
