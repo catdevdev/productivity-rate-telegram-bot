@@ -12,15 +12,18 @@ app = FastAPI(
     }
 )
 
+# Define the Pydantic model for expense input
 class Expense(BaseModel):
     destination: str = Field(..., example="Groceries")
     amount: float = Field(..., example=100.0)
     currency: Literal['USD', 'EUR', 'UAH'] = Field(..., example='UAH')
 
+# Define the Pydantic model for expense output
 class ExpenseOutput(Expense):
     id: int
     created_at: datetime
 
+# Database connection pool
 DATABASE_URL = 'postgresql://nekoneki:nekoneki@a2794a54deb1c4f1bac4d5dfc8590d37-1520523198.eu-north-1.elb.amazonaws.com:5432/expenses_db'
 pool = None
 
@@ -48,6 +51,7 @@ async def on_startup():
 async def on_shutdown():
     await pool.close()
 
+# Corrected POST endpoint to accept a direct list of Expense objects
 @app.post("/expenses/", response_model=List[ExpenseOutput])
 async def create_expenses(expenses: List[Expense]):
     created_expenses = []
