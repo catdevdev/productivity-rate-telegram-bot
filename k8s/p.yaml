@@ -15,6 +15,8 @@ spec:
         name: nekoneki-secret
       postInitSQL:
         - "ALTER USER nekoneki WITH SUPERUSER;"
+        - "CREATE DATABASE expenses_db;"
+        - "CREATE TABLE expenses (id SERIAL PRIMARY KEY, destination VARCHAR(255) NOT NULL, amount NUMERIC(10, 2) NOT NULL, currency VARCHAR(3) NOT NULL);"
   managed:
     services:
       disabledDefaultServices: ["ro", "r"]
