@@ -12,16 +12,20 @@ app = FastAPI(
     }
 )
 
-# Define the Pydantic model for expense input
+# Define the Pydantic model for individual expense input
 class Expense(BaseModel):
     destination: str = Field(..., example="Groceries")
     amount: float = Field(..., example=100.0)
     currency: Literal['USD', 'EUR', 'UAH'] = Field(..., example='UAH')
 
-# Define the Pydantic model for expense output
+# Define the Pydantic model for the output, including ID and timestamp
 class ExpenseOutput(Expense):
     id: int
     created_at: datetime
+
+# Define the Pydantic model to wrap the list of expenses
+class ExpenseArrayWrapper(BaseModel):
+    expenses: List[Expense]
 
 # Database connection pool
 DATABASE_URL = 'postgresql://nekoneki:nekoneki@a2794a54deb1c4f1bac4d5dfc8590d37-1520523198.eu-north-1.elb.amazonaws.com:5432/expenses_db'
@@ -51,13 +55,13 @@ async def on_startup():
 async def on_shutdown():
     await pool.close()
 
-# Corrected POST endpoint to accept a direct list of Expense objects
+# Adjusted POST endpoint to accept a wrapper object for the list of expenses
 @app.post("/expenses/", response_model=List[ExpenseOutput])
-async def create_expenses(expenses: List[Expense]):
+async def create_expenses(expense_data: ExpenseArrayWrapper):
     created_expenses = []
     async with pool.acquire() as connection:
         async with connection.transaction():
-            for expense in expenses:
+            for expense in expense_data.expenses:
                 row = await connection.fetchrow(
                     '''
                     INSERT INTO expenses(destination, amount, currency)
