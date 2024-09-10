@@ -23,7 +23,6 @@ class ExpenseOutput(Expense):
     id: int
     created_at: datetime
 
-# Define the Pydantic model to wrap the list of expenses
 class ExpenseArrayWrapper(BaseModel):
     expenses: List[Expense]
 
