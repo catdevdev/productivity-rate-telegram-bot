@@ -112,12 +112,14 @@ async def delete_expenses(delete_request: DeleteExpensesRequest):
                     'DELETE FROM expenses WHERE id = ANY($1::int[])',
                     delete_request.expense_ids
                 )
-                # Extract the number of deleted rows from the result
                 deleted_count = int(result.split(' ')[1])
                 if deleted_count == 0:
                     raise HTTPException(status_code=404, detail="No expenses found to delete")
         return {"message": f"Expenses with ids {delete_request.expense_ids} deleted successfully, count: {deleted_count}"}
+    except HTTPException as e:
+        logger.error(f"HTTP error during deletion: {e}")
+        raise
     except Exception as e:
-        # Log the error and raise an HTTP exception with status 500
-        logger.error(f"Error occurred while deleting expenses: {e}")
+        logger.error(f"Unexpected error occurred: {e}")
         raise HTTPException(status_code=500, detail="Server error occurred while deleting expenses.")
+
