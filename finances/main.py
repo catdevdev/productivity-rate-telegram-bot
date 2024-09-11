@@ -96,7 +96,6 @@ async def get_expenses(expense_date: Optional[date] = Query(None, description="F
             rows = await connection.fetch('SELECT * FROM expenses ORDER BY created_at DESC')
         return [dict(row) for row in rows]
 
-# Updated endpoint to delete multiple expenses with proper response handling
 @app.delete("/expenses/", response_model=DeleteExpensesResponse)
 async def delete_expenses(delete_request: DeleteExpensesRequest):
     async with pool.acquire() as connection:
