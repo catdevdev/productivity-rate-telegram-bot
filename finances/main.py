@@ -57,7 +57,6 @@ async def delete_expenses(delete_request: DeleteExpensesRequest):
     try:
         async with pool.acquire() as connection:
             async with connection.transaction():
-                # Execute the delete statement and capture the number of affected rows
                 result = await connection.execute(
                     'DELETE FROM expenses WHERE id = ANY($1::int[])',
                     delete_request.expense_ids
