@@ -85,7 +85,6 @@ async def create_expenses(expense_data: ExpenseArrayWrapper):
                 created_expenses.append(dict(row))
     return created_expenses
 
-# GET endpoint to retrieve expenses, optionally filtering by date
 @app.get("/expenses/", response_model=List[ExpenseOutput])
 async def get_expenses(expense_date: Optional[date] = Query(None, description="Filter expenses by date")) -> List[ExpenseOutput]:
     async with pool.acquire() as connection:
