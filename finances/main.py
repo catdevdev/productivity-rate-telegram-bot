@@ -29,7 +29,6 @@ class ExpenseOutput(Expense):
 class ExpenseArrayWrapper(BaseModel):
     expenses: List[Expense]
 
-# Define the Pydantic model for deleting multiple expenses
 class DeleteExpensesRequest(BaseModel):
     expense_ids: List[int] = Field(..., example=[1, 2, 3])
 
