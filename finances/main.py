@@ -30,6 +30,10 @@ class ExpenseArrayWrapper(BaseModel):
 class DeleteExpensesRequest(BaseModel):
     expense_ids: List[int] = Field(..., example=[1, 2, 3])
 
+# Define the Pydantic model for the successful delete response
+class DeleteExpensesResponse(BaseModel):
+    message: str = Field(..., example="Expenses with ids [1, 2, 3] deleted successfully, count: 3")
+
 # Database connection pool
 DATABASE_URL = 'postgresql://nekoneki:nekoneki@a2794a54deb1c4f1bac4d5dfc8590d37-1520523198.eu-north-1.elb.amazonaws.com:5432/expenses_db'
 pool = None
@@ -93,7 +97,7 @@ async def get_expenses(expense_date: Optional[date] = Query(None, description="F
         return [dict(row) for row in rows]
 
 # Updated endpoint to delete multiple expenses with proper response handling
-@app.delete("/expenses/", response_model=dict)
+@app.delete("/expenses/", response_model=DeleteExpensesResponse)
 async def delete_expenses(delete_request: DeleteExpensesRequest):
     async with pool.acquire() as connection:
         async with connection.transaction():
