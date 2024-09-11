@@ -29,6 +29,7 @@ class ExpenseOutput(Expense):
 class ExpenseArrayWrapper(BaseModel):
     expenses: List[Expense]
 
+# Define the Pydantic model for deleting multiple expenses
 class DeleteExpensesRequest(BaseModel):
     expense_ids: List[int] = Field(..., example=[1, 2, 3])
 
@@ -85,6 +86,7 @@ async def create_expenses(expense_data: ExpenseArrayWrapper):
                 created_expenses.append(dict(row))
     return created_expenses
 
+# GET endpoint to retrieve expenses, optionally filtering by date
 @app.get("/expenses/", response_model=List[ExpenseOutput])
 async def get_expenses(expense_date: Optional[date] = Query(None, description="Filter expenses by date")) -> List[ExpenseOutput]:
     async with pool.acquire() as connection:
@@ -101,8 +103,8 @@ async def get_expenses(expense_date: Optional[date] = Query(None, description="F
             rows = await connection.fetch('SELECT * FROM expenses ORDER BY created_at DESC')
         return [dict(row) for row in rows]
 
-# DELETE endpoint to delete multiple expenses
-@app.delete("/expenses/", response_model=DeleteExpensesResponse)
+# POST endpoint to delete multiple expenses (changed from DELETE to POST)
+@app.post("/expenses/delete", response_model=DeleteExpensesResponse)
 async def delete_expenses(delete_request: DeleteExpensesRequest):
     try:
         async with pool.acquire() as connection:
@@ -121,4 +123,3 @@ async def delete_expenses(delete_request: DeleteExpensesRequest):
     except Exception as e:
         logger.error(f"Unexpected error occurred: {e}")
         raise HTTPException(status_code=500, detail="Server error occurred while deleting expenses.")
-
