@@ -1,4 +1,3 @@
-# PostgreSQL Cluster Configuration
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
@@ -29,14 +28,20 @@ spec:
               type: LoadBalancer
   storage:
     size: 1Gi
-
----
-# Secret for PostgreSQL Owner
-apiVersion: v1
-kind: Secret
-metadata:
-  name: nekoneki-secret
-type: kubernetes.io/basic-auth
-data:
-  username: bmVrb25la2k= # Base64 encoded 'nekoneki'
-  password: bmVrb25la2k= # Base64 encoded 'nekoneki'
+    storageClass: gp2
+    pvcTemplate:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi
+      storageClassName: gp2
+  walStorage:
+    size: 1Gi
+    pvcTemplate:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi
+      storageClassName: gp2

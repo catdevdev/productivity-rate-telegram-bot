@@ -38,7 +38,7 @@ class DeleteExpensesResponse(BaseModel):
     message: str = Field(..., example="Expenses with ids [1, 2, 3] deleted successfully, count: 3")
 
 # Database connection pool
-DATABASE_URL = 'postgresql://nekoneki:nekoneki@a2794a54deb1c4f1bac4d5dfc8590d37-1520523198.eu-north-1.elb.amazonaws.com:5432/expenses_db'
+DATABASE_URL = 'postgresql://nekoneki:nekoneki@a6c801ad4150c47ca852135187596be6-1651913091.eu-north-1.elb.amazonaws.com:5432/expenses_db'
 pool = None
 
 # Initialize the database connection pool
@@ -61,6 +61,7 @@ async def init_db():
 # Event handler to initialize the database on application startup
 @app.on_event("startup")
 async def on_startup():
+    
     await init_db()
 
 # Event handler to close the database connection pool on application shutdown

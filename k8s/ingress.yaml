@@ -18,9 +18,20 @@ spec:
                 name: expenses-repo-service
                 port:
                   number: 443
+    - host: finances.api-api-api.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: expenses-repo-service
+                port:
+                  number: 443
   tls:
     - hosts:
         - api-api-api.com
+        - finances.api-api-api.com
       secretName: cert-secret-name
 ---
 apiVersion: cert-manager.io/v1
@@ -49,6 +60,7 @@ spec:
   isCA: false
   dnsNames:
     - api-api-api.com
+    - finances.api-api-api.com
   issuerRef:
     name: letsencrypt-issuer
     kind: ClusterIssuer
