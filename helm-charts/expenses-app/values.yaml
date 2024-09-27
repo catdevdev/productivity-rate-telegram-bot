@@ -1,0 +1,7 @@
+name: expenses-repo
+app: expenses-repo
+replicaCount: 1
+
+image:
+  repository: 014498641718.dkr.ecr.eu-north-1.amazonaws.com/expenses-repo
+  tag: latest # You can replace this dynamically with the CICD_GIT_COMMIT value during your CI/CD process.

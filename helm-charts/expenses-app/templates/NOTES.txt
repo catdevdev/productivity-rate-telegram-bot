@@ -1,0 +1,72 @@
+Thank you for installing the {{ .Chart.Name }}!
+
+Your application has been deployed successfully.
+
+1. **Deployment Information**:
+   - Release Name: {{ .Release.Name }}
+   - Namespace: {{ .Release.Namespace }}
+   - Replica Count: {{ .Values.replicaCount }}
+
+2. **Accessing the Application**:
+
+   - The deployment is available as a Kubernetes Service of type **LoadBalancer**.
+   - You can retrieve the external IP address (if applicable) by running:
+
+     ```bash
+     kubectl get svc {{ .Values.name }}-service -n {{ .Release.Namespace }}
+     ```
+
+   - Alternatively, the service can be accessed via its internal Kubernetes cluster IP using the following details:
+     - **Service Name**: {{ .Values.name }}-service
+     - **Port**: 443
+
+3. **Checking the Deployment**:
+
+   - You can verify that the pods are up and running by executing the following:
+
+     ```bash
+     kubectl get pods -l app={{ .Values.app }} -n {{ .Release.Namespace }}
+     ```
+
+4. **Application Logging**:
+
+   - To check the logs from the deployed container, use:
+
+     ```bash
+     kubectl logs -l app={{ .Values.app }} -n {{ .Release.Namespace }}
+     ```
+
+5. **Updating Your Deployment**:
+
+   - If you need to update your deployment, use:
+
+     ```bash
+     helm upgrade {{ .Release.Name }} ./expenses-app
+     ```
+
+6. **Uninstalling the Chart**:
+
+   - To uninstall the chart and remove all associated Kubernetes resources, run:
+
+     ```bash
+     helm uninstall {{ .Release.Name }}
+     ```
+
+7. **Customizing Your Deployment**:
+
+   - You can customize your deployment by modifying `values.yaml` or using the `--set` flag during `helm install` or `helm upgrade` to override specific values.
+
+   Example to set a custom Docker image tag:
+
+     ```bash
+     helm upgrade {{ .Release.Name }} ./expenses-app --set image.tag=YOUR_TAG_HERE
+     ```
+
+---
+
+**Next Steps**:
+
+- Monitor your application, ensure it's running as expected, and begin utilizing it.
+- If you encounter any issues, refer to the above commands to get more information from your deployment.
+
+Happy Helm-ing with your `expenses-app`! 🚀
