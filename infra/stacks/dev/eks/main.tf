@@ -18,13 +18,13 @@ terraform {
 }
 
 provider "aws" {
-  region  = local.region  # Use the local.region variable to define the region
+  region  = local.region # Use the local.region variable to define the region
   profile = "dev"
 }
 
 provider "aws" {
-  region = "us-east-1"  # Correct region for accessing ECR Public
-  alias  = "public_ecr"
+  region  = "us-east-1" # Correct region for accessing ECR Public
+  alias   = "public_ecr"
   profile = "dev"
 }
 
@@ -63,7 +63,7 @@ data "aws_ecrpublic_authorization_token" "token" {
 
 locals {
   name   = "ex-${basename(path.cwd)}"
-  region = "eu-north-1"  # Set the region to eu-north-1
+  region = "eu-north-1" # Set the region to eu-north-1
 
   vpc_cidr = "10.0.0.0/16"
   azs      = slice(data.aws_availability_zones.available.names, 0, 3)
@@ -80,7 +80,7 @@ locals {
 ################################################################################
 
 module "eks" {
-  source  = "terraform-aws-modules/eks/aws"
+  source = "terraform-aws-modules/eks/aws"
 
   cluster_name    = local.name
   cluster_version = "1.30"
@@ -143,7 +143,7 @@ module "eks" {
 ################################################################################
 
 module "karpenter" {
-  source  = "terraform-aws-modules/eks/aws//modules/karpenter"
+  source = "terraform-aws-modules/eks/aws//modules/karpenter"
 
   cluster_name = module.eks.cluster_name
 
@@ -159,7 +159,7 @@ module "karpenter" {
 }
 
 module "karpenter_disabled" {
-  source  = "terraform-aws-modules/eks/aws//modules/karpenter"
+  source = "terraform-aws-modules/eks/aws//modules/karpenter"
 
   create = false
 }

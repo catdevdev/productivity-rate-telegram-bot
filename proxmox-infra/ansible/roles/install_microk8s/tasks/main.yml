@@ -1,0 +1,13 @@
+---
+# tasks file for roles/install_microk8s
+---
+- name: Установить MicroK8s
+  snap:
+    name: microk8s
+    state: latest
+
+- name: Добавить текущего пользователя в группу microk8s
+  command: usermod -a -G microk8s {{ ansible_user }}
+
+- name: Включить необходимые дополнения для MicroK8s
+  command: microk8s enable dns storage

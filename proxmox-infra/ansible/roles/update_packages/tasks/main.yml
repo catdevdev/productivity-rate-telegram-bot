@@ -1,0 +1,10 @@
+# roles/update_packages/tasks/main.yml
+---
+- name: Обновить список пакетов
+  apt:
+    update_cache: yes
+
+- name: Обновить все установленные пакеты
+  apt:
+    upgrade: dist
+    autoremove: yes
