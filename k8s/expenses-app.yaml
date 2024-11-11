@@ -5,7 +5,7 @@ metadata:
   labels:
     app: expenses-repo
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: expenses-repo
